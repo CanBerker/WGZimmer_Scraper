@@ -33,10 +33,13 @@ def wg_spider():
 
     list = soup.find('ul', {'class': 'list'})
 
+    link_index = 0
     for link in list.findAll('a', {'class': None}):
         href = "https://www.wgzimmer.ch" + link.get('href')
+        link_index = link_index + 1
+        print link_index
         get_single_zimmer(href)
-        break;     # DEBUG: break after 1 iteration
+        #break;     # DEBUG: break after 1 iteration
 
 
 def get_single_zimmer(zimmer_url):
@@ -110,11 +113,15 @@ def get_single_zimmer(zimmer_url):
 translator = Translator()
 
 def german_to_english(text):
-    return translator.translate(text= text, src= 'de', dest= 'en').text
+    try:
+        return translator.translate(text= text, src= 'de', dest= 'en').text
+    except Exception, e:
+        print "Exception thrown: " + str(e) + " .Failed to convert the following text: " + str(text)
+        return text
 
 #print german_to_english("du hast mich")
 
-debug = 1
+debug = 0
 with open('wg_zimmer_'+ str(datetime.date.today()) +'.csv', 'wb') as csvfile:
     writer = csv.writer(csvfile, delimiter=','
                         #, quotechar='|'
