@@ -36,7 +36,7 @@ def wg_spider():
     for link in list.findAll('a', {'class': None}):
         href = "https://www.wgzimmer.ch" + link.get('href')
         get_single_zimmer(href)
-        #break;     # DEBUG: break after 1 iteration
+        break;     # DEBUG: break after 1 iteration
 
 
 def get_single_zimmer(zimmer_url):
@@ -62,6 +62,7 @@ def get_single_zimmer(zimmer_url):
                 row_data.append(p_item.text)
                 if (debug == 1):
                     print p_item.text
+                    print type(p_item.text)
             address_row_index = address_row_index + 1
 
     description = soup.find('div', {'class': 'mate-content'})
@@ -70,6 +71,7 @@ def get_single_zimmer(zimmer_url):
             row_data.append(german_to_english(p_item.text))
             if (debug == 1):
                 print german_to_english(p_item.text)
+                print type(german_to_english(p_item.text))
 
     images = soup.find('div', {'class': 'image-content'})
     if images is not None:
@@ -99,6 +101,8 @@ def get_single_zimmer(zimmer_url):
             if (debug == 1):
                 print input.get('value')
 
+    # remove newlines if the item is a string
+    row_data = [item.replace('\n', ' ').replace('\r', '') if isinstance(item, basestring) else '-' for item in row_data]
     writer.writerow(row_data)
 
     #time.sleep(1) ease the load on the server
@@ -110,9 +114,10 @@ def german_to_english(text):
 
 #print german_to_english("du hast mich")
 
-debug = 0
+debug = 1
 with open('wg_zimmer_'+ str(datetime.date.today()) +'.csv', 'wb') as csvfile:
-    writer = csv.writer(csvfile, delimiter=',',
-                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    writer = csv.writer(csvfile, delimiter=','
+                        #, quotechar='|'
+                        , quoting=csv.QUOTE_MINIMAL)
 
     wg_spider()
