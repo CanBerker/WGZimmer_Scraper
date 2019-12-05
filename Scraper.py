@@ -55,7 +55,8 @@ def get_single_zimmer(zimmer_url):
             row_data.append(p_item.text)
             if(debug == 1):
                 print p_item.text
-
+    else:
+        row_data.append('')
 
     address_row_index = 0   # ignore the 4th row which shows "Google Maps and Google Translate"
     address = soup.find('div', {'class': 'adress-region'})
@@ -67,6 +68,8 @@ def get_single_zimmer(zimmer_url):
                     print p_item.text
                     print type(p_item.text)
             address_row_index = address_row_index + 1
+    else:
+        row_data.append('')
 
     description = soup.find('div', {'class': 'mate-content'})
     if description is not None:
@@ -75,6 +78,8 @@ def get_single_zimmer(zimmer_url):
             if (debug == 1):
                 print german_to_english(p_item.text)
                 print type(german_to_english(p_item.text))
+    else:
+        row_data.append('')
 
     images = soup.find('div', {'class': 'image-content'})
     if images is not None:
@@ -82,6 +87,8 @@ def get_single_zimmer(zimmer_url):
             row_data.append("https://www.wgzimmer.ch" + a_item.get('href'))
             if (debug == 1):
                 print "https://www.wgzimmer.ch" + a_item.get('href')
+    else:
+        row_data.append('')
 
     we_are_looking_for = soup.find('div', {'class': 'person-content'})
     if we_are_looking_for is not None:
@@ -89,6 +96,8 @@ def get_single_zimmer(zimmer_url):
             row_data.append(german_to_english(p_item.text))
             if (debug == 1):
                 print german_to_english(p_item.text)
+    else:
+        row_data.append('')
 
     we_are = soup.find('div', {'class': 'room-content'})
     if we_are is not None:
@@ -96,6 +105,8 @@ def get_single_zimmer(zimmer_url):
             row_data.append(german_to_english(p_item.text))
             if (debug == 1):
                 print german_to_english(p_item.text)
+    else:
+        row_data.append('')
 
     direct_link = soup.find('form', {'class': 'direct-link'})
     if direct_link is not None:
@@ -103,6 +114,8 @@ def get_single_zimmer(zimmer_url):
             row_data.append(input.get('value'))
             if (debug == 1):
                 print input.get('value')
+    else:
+        row_data.append('')
 
     # remove newlines if the item is a string
     row_data = [item.replace('\n', ' ').replace('\r', '') if isinstance(item, basestring) else '-' for item in row_data]
